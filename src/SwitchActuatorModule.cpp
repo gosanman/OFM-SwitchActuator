@@ -290,17 +290,17 @@ void SwitchActuatorModule::runTestMode()
 
         logInfoP("ON");
         openknx.gpio.digitalWrite(RELAY_SET_PINS[i], OPENKNX_SWA_SET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], !OPENKNX_SWA_SET_ACTIVE_ON);
+        //delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
+        //openknx.gpio.digitalWrite(RELAY_SET_PINS[i], !OPENKNX_SWA_SET_ACTIVE_ON);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif
         delay(500);
 
         logInfoP("OFF");
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], OPENKNX_SWA_RESET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], !OPENKNX_SWA_RESET_ACTIVE_ON);
+        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], OPENKNX_SWA_SET_ACTIVE_OFF);
+        //delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
+        //openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], !OPENKNX_SWA_RESET_ACTIVE_ON);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], !OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif
@@ -308,17 +308,17 @@ void SwitchActuatorModule::runTestMode()
 
         logInfoP("ON");
         openknx.gpio.digitalWrite(RELAY_SET_PINS[i], OPENKNX_SWA_SET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], !OPENKNX_SWA_SET_ACTIVE_ON);
+        //delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
+        //openknx.gpio.digitalWrite(RELAY_SET_PINS[i], !OPENKNX_SWA_SET_ACTIVE_ON);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif
         delay(500);
 
         logInfoP("OFF");
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], OPENKNX_SWA_RESET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], !OPENKNX_SWA_RESET_ACTIVE_ON);
+        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], OPENKNX_SWA_SET_ACTIVE_OFF);
+        //delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
+        //openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], !OPENKNX_SWA_RESET_ACTIVE_ON);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], !OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif

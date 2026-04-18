@@ -349,8 +349,10 @@ void SwitchActuatorChannel::doSwitchInternal(bool active, bool syncSwitch)
     }
     else
     {
-        logDebugP("Write relay state activeSet=%u to GPIO %u with value %u", activeSet, RELAY_RESET_PINS[_channelIndex], OPENKNX_SWA_RESET_ACTIVE_ON);
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[_channelIndex], OPENKNX_SWA_RESET_ACTIVE_ON);
+        //logDebugP("Write relay state activeSet=%u to GPIO %u with value %u", activeSet, RELAY_RESET_PINS[_channelIndex], OPENKNX_SWA_RESET_ACTIVE_ON);
+        //openknx.gpio.digitalWrite(RELAY_RESET_PINS[_channelIndex], OPENKNX_SWA_RESET_ACTIVE_ON);
+        logDebugP("Write relay state activeSet=%u to GPIO %u with value %u", activeSet, RELAY_SET_PINS[_channelIndex], OPENKNX_SWA_SET_ACTIVE_OFF);
+        openknx.gpio.digitalWrite(RELAY_SET_PINS[_channelIndex], OPENKNX_SWA_SET_ACTIVE_OFF);
     }
     relayBistableImpulsTimer = delayTimerInit();
 
@@ -389,7 +391,7 @@ void SwitchActuatorChannel::setup(bool configured)
 {
 #if OPENKNX_SWA_CHANNEL_COUNT > 0
     openknx.gpio.pinMode(RELAY_SET_PINS[_channelIndex], OUTPUT, true, !OPENKNX_SWA_SET_ACTIVE_ON);
-    openknx.gpio.pinMode(RELAY_RESET_PINS[_channelIndex], OUTPUT, true, !OPENKNX_SWA_RESET_ACTIVE_ON);
+    //openknx.gpio.pinMode(RELAY_RESET_PINS[_channelIndex], OUTPUT, true, !OPENKNX_SWA_RESET_ACTIVE_ON);
 
     // set it again the standard way, just in case
     relaisOff();
@@ -410,11 +412,11 @@ void SwitchActuatorChannel::setup(bool configured)
 void SwitchActuatorChannel::loop()
 {
 #if OPENKNX_SWA_CHANNEL_COUNT > 0
-    if (relayBistableImpulsTimer > 0 && delayCheck(relayBistableImpulsTimer, OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH))
-    {
-        relaisOff();
-        relayBistableImpulsTimer = 0;
-    }
+    //if (relayBistableImpulsTimer > 0 && delayCheck(relayBistableImpulsTimer, OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH))
+    //{
+    //    relaisOff();
+    //    relayBistableImpulsTimer = 0;
+    //}
 
     if (turnOnDelayTimer > 0 && delayCheck(turnOnDelayTimer, ParamSWA_ChTurnOnDelayTimeMS))
     {
@@ -569,11 +571,11 @@ float SwitchActuatorChannel::getCurrent()
 void SwitchActuatorChannel::relaisOff()
 {
 #if OPENKNX_SWA_CHANNEL_COUNT > 0
-    logDebugP("Write relay state off to GPIO %u with value %u", RELAY_SET_PINS[_channelIndex], !OPENKNX_SWA_SET_ACTIVE_ON);
-    openknx.gpio.digitalWrite(RELAY_SET_PINS[_channelIndex], !OPENKNX_SWA_SET_ACTIVE_ON);
+    //logDebugP("Write relay state off to GPIO %u with value %u", RELAY_SET_PINS[_channelIndex], !OPENKNX_SWA_SET_ACTIVE_ON);
+    //openknx.gpio.digitalWrite(RELAY_SET_PINS[_channelIndex], !OPENKNX_SWA_SET_ACTIVE_ON);
 
-    logDebugP("Write relay state off to GPIO %u with value %u", RELAY_RESET_PINS[_channelIndex], !OPENKNX_SWA_RESET_ACTIVE_ON);
-    openknx.gpio.digitalWrite(RELAY_RESET_PINS[_channelIndex], !OPENKNX_SWA_RESET_ACTIVE_ON);
+    //logDebugP("Write relay state off to GPIO %u with value %u", RELAY_RESET_PINS[_channelIndex], !OPENKNX_SWA_RESET_ACTIVE_ON);
+    //openknx.gpio.digitalWrite(RELAY_RESET_PINS[_channelIndex], !OPENKNX_SWA_RESET_ACTIVE_ON);
 #endif
 }
 
