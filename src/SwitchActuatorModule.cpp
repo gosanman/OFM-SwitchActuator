@@ -223,6 +223,9 @@ bool SwitchActuatorModule::restorePower()
 
 void SwitchActuatorModule::showHelp()
 {
+    openknx.logger.color(CONSOLE_HEADLINE_COLOR);
+    openknx.logger.log("======================== Switch Actuator Module ================================");
+    openknx.logger.color(0);
     logInfo("sa switch <channel> 0-1", "set (1) / reset (0) channel a-%c", OPENKNX_SWA_CHANNEL_COUNT-1+'a');
     logInfo("sa toggle <channel>", "toggle channel a-%c", OPENKNX_SWA_CHANNEL_COUNT-1+'a');
     logInfo("sa test mode", "Test all channels one after the other.");
