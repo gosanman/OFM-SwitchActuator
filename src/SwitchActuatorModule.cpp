@@ -196,6 +196,9 @@ bool SwitchActuatorModule::restorePower()
 
 void SwitchActuatorModule::showHelp()
 {
+    openknx.logger.color(CONSOLE_HEADLINE_COLOR);
+    openknx.logger.log("======================== Switch Actuator Module ================================");
+    openknx.logger.color(0);
     logInfo("sa switch <channel> 0-1", "set (1) / reset (0) channel a-%c", OPENKNX_SWA_CHANNEL_COUNT-1+'a');
     logInfo("sa toggle <channel>", "toggle channel a-%c", OPENKNX_SWA_CHANNEL_COUNT-1+'a');
     logInfo("sa test mode", "Test all channels one after the other.");
@@ -250,6 +253,21 @@ bool SwitchActuatorModule::processCommand(const std::string cmd, bool diagnoseKo
     return true;
 }
 
+#if OPENKNX_SWA_CHANNEL_COUNT > 0
+static void testSwitchRelay(uint8_t i, bool on)
+{
+#ifdef OPENKNX_SWA_PINS
+    openknx.gpio.digitalWrite(RELAY_SET_PINS[i], on ? OPENKNX_SWA_ACTIVE_ON : !OPENKNX_SWA_ACTIVE_ON);
+#else
+    const uint16_t pin = on ? RELAY_SET_PINS[i] : RELAY_RESET_PINS[i];
+    const uint8_t activeOn = on ? OPENKNX_SWA_SET_ACTIVE_ON : OPENKNX_SWA_RESET_ACTIVE_ON;
+    openknx.gpio.digitalWrite(pin, activeOn);
+    delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
+    openknx.gpio.digitalWrite(pin, !activeOn);
+#endif
+}
+#endif
+
 void SwitchActuatorModule::runTestMode()
 {
 #if OPENKNX_SWA_CHANNEL_COUNT > 0
@@ -262,36 +280,28 @@ void SwitchActuatorModule::runTestMode()
         logIndentUp();
 
         logInfoP("ON");
-        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], OPENKNX_SWA_SET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], !OPENKNX_SWA_SET_ACTIVE_ON);
+        testSwitchRelay(i, true);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif
         delay(500);
 
         logInfoP("OFF");
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], OPENKNX_SWA_RESET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], !OPENKNX_SWA_RESET_ACTIVE_ON);
+        testSwitchRelay(i, false);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], !OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif
         delay(500);
 
         logInfoP("ON");
-        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], OPENKNX_SWA_SET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_SET_PINS[i], !OPENKNX_SWA_SET_ACTIVE_ON);
+        testSwitchRelay(i, true);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif
         delay(500);
 
         logInfoP("OFF");
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], OPENKNX_SWA_RESET_ACTIVE_ON);
-        delay(OPENKNX_SWA_BISTABLE_IMPULSE_LENGTH);
-        openknx.gpio.digitalWrite(RELAY_RESET_PINS[i], !OPENKNX_SWA_RESET_ACTIVE_ON);
+        testSwitchRelay(i, false);
 #ifdef OPENKNX_SWA_STATUS_PINS
         openknx.gpio.digitalWrite(RELAY_STATUS_PINS[i], !OPENKNX_SWA_STATUS_ACTIVE_ON);
 #endif

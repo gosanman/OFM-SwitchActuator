@@ -9,7 +9,14 @@
 #define OPENKNX_LEDFUNC_SWA_STATUS 800
 #define OPENKNX_LEDFUNC_SWA_CHANNEL_STATUS (OPENKNX_LEDFUNC_SWA_STATUS + _channelIndex + 1)
 
-#ifdef OPENKNX_SWA_SET_PINS
+#if defined(OPENKNX_SWA_PINS) && defined(OPENKNX_SWA_SET_PINS)
+  #error "Define either OPENKNX_SWA_PINS (monostable relay) or OPENKNX_SWA_SET_PINS/OPENKNX_SWA_RESET_PINS (bistable relay), not both"
+#endif
+
+#ifdef OPENKNX_SWA_PINS
+  // monostable relay: one pin per channel, the pin level is the relay state (OPENKNX_SWA_ACTIVE_ON = on)
+  const uint16_t RELAY_SET_PINS[OPENKNX_SWA_CHANNEL_COUNT] = {OPENKNX_SWA_PINS};
+#elif defined(OPENKNX_SWA_SET_PINS)
   const uint16_t RELAY_SET_PINS[OPENKNX_SWA_CHANNEL_COUNT] = {OPENKNX_SWA_SET_PINS};
   const uint16_t RELAY_RESET_PINS[OPENKNX_SWA_CHANNEL_COUNT] = {OPENKNX_SWA_RESET_PINS};
 #else
